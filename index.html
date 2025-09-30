@@ -68,10 +68,6 @@
     .album-button:hover{transform:translateY(-3px);background:rgba(138,59,214,0.08)}
     .album-button.active{background:linear-gradient(90deg, rgba(138,59,214,0.14), rgba(184,146,255,0.06));border-color:rgba(138,59,214,0.28);color:var(--accent-2);box-shadow:0 12px 40px rgba(138,59,214,0.08)}
 
-    .album-actions{display:flex;gap:10px;align-items:center}
-    .search{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:10px;color:var(--muted);min-width:180px}
-    .search::placeholder{color:rgba(205,184,255,0.45)}
-
     .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px}
 
     .photo-card{background:linear-gradient(180deg,var(--card-bg),rgba(0,0,0,0.06));border-radius:var(--radius-lg);overflow:hidden;padding:12px;cursor:pointer;transition:var(--transition);box-shadow:var(--shadow);position:relative;min-height:300px;display:flex;flex-direction:column}
@@ -130,7 +126,6 @@
 
     <div class="controls" role="navigation" aria-label="Site actions">
       <button class="muted-btn" aria-hidden="true">UOBDEVS</button>
-      <button class="cta" onclick="location.href='#gallery'">View Gallery</button>
     </div>
   </header>
 
@@ -140,10 +135,7 @@
         <div class="album-title">Albums</div>
         <div id="album-controls" class="album-controls" aria-label="Album list"></div>
       </div>
-
-      <div class="album-actions" aria-hidden="true">
-        <input id="album-search" class="search" placeholder="Search albums (UI only)" aria-label="Search albums (UI only)">
-      </div>
+      <!-- search box removed as requested -->
     </div>
 
     <!-- Loader stays in DOM for compatibility but is hidden by default via CSS to avoid flashes in previews -->
@@ -376,12 +368,7 @@
       }
     });
 
-    document.getElementById('album-search').addEventListener('input', (e) => {
-      const q = e.target.value.trim().toLowerCase();
-      document.querySelectorAll('.album-button').forEach(btn => {
-        btn.style.display = btn.textContent.toLowerCase().includes(q) ? '' : 'none';
-      });
-    });
+    // (search-related code removed)
 
     initAlbums().catch(error => {
       console.error('Failed to initialize gallery:', error);

@@ -234,80 +234,60 @@
 
     .gallery{
       display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-      gap:28px;
+      grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+      gap:4px;
+      padding:0;
     }
 
     .photo-card{
-      background:var(--card-bg);
-      border-radius:var(--radius-lg);
+      background:transparent;
+      border-radius:0;
       overflow:hidden;
-      padding:14px;
+      padding:0;
       cursor:pointer;
-      transition:var(--transition);
-      box-shadow:var(--shadow);
+      transition:opacity 0.2s ease;
+      box-shadow:none;
       position:relative;
-      min-height:320px;
-      display:flex;
-      flex-direction:column;
-      border:1px solid rgba(168,85,247,0.08);
+      aspect-ratio:1;
+      border:none;
     }
 
     .photo-card::before{
-      content:'';
-      position:absolute;
-      top:0;
-      left:0;
-      right:0;
-      height:3px;
-      background:linear-gradient(90deg,var(--accent),var(--accent-2));
-      opacity:0;
-      transition:var(--transition);
+      display:none;
     }
 
     .photo-card:hover{
-      transform:translateY(-12px);
-      box-shadow:var(--shadow-xl);
-      border-color:rgba(168,85,247,0.2);
+      transform:none;
+      box-shadow:none;
+      border-color:transparent;
+      opacity:0.85;
     }
 
-    .photo-card:hover::before{opacity:1}
+    .photo-card:hover::before{opacity:0}
 
     .photo-card .thumb{
       width:100%;
-      height:260px;
+      height:100%;
       object-fit:cover;
-      border-radius:var(--radius-md);
-      transition:transform 0.4s var(--transition);
+      border-radius:0;
+      transition:opacity 0.2s ease;
       flex-shrink:0;
       background:linear-gradient(180deg, rgba(168,85,247,0.05), rgba(0,0,0,0.2));
       display:block;
     }
 
-    .photo-card:hover .thumb{transform:scale(1.05)}
+    .photo-card:hover .thumb{transform:none}
 
     .photo-meta{
-      margin-top:14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+      display:none;
     }
 
     .photo-meta .caption{
-      color:var(--accent-2);
-      font-weight:600;
-      font-size:0.95rem;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      padding-right:10px;
+      display:none;
     }
 
     .photo-meta .meta-right{
-      color:var(--muted);
-      font-size:0.85rem;
-      opacity:0.7;
+      display:none;
     }
 
     .empty{
@@ -591,14 +571,13 @@
       .site-header{flex-direction:column;gap:16px;align-items:center;padding:18px 24px}
       .brand{gap:12px}
       .logo{width:70px;height:70px}
-      .gallery{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+      .gallery{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
       .album-area{padding:16px 20px}
     }
 
     @media (max-width:680px){
       .container{padding:0 20px}
-      .gallery{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px}
-      .photo-card .thumb{height:220px}
+      .gallery{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:3px}
       .lb-nav{width:54px;height:54px;font-size:30px}
       .footer-container{flex-direction:column;gap:28px;text-align:center}
       .footer-brand{flex-direction:column;gap:14px}
@@ -608,8 +587,7 @@
     }
 
     @media (max-width:480px){
-      .gallery{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
-      .photo-card .thumb{height:180px}
+      .gallery{grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:2px}
       .lb-nav{width:46px;height:46px;font-size:26px}
       #lb-prev{left:12px}
       #lb-next{right:12px}
@@ -827,85 +805,74 @@
 
         img.addEventListener('click', () => openLightbox(idx));
 
-        const figcaption = document.createElement('figcaption');
-        figcaption.className = 'photo-meta';
-
-        const cap = document.createElement('div');
-        cap.className = 'caption';
-        cap.textContent = filename;
-
-        const metaRight = document.createElement('div');
-        metaRight.className = 'meta-right';
-        metaRight.textContent = `${idx + 1}`;
-
-        figcaption.appendChild(cap);
-        figcaption.appendChild(metaRight);
-
         fig.appendChild(img);
-        fig.appendChild(figcaption);
         gallery.appendChild(fig);
       });
-    }
-
-    function showError(message) {
-      notice.innerHTML = `
-        <div class="empty-icon">⚠️</div>
-        <p>${message}</p>
-      `;
-      notice.hidden = false;
-      gallery.innerHTML = '';
+      currentIndex = -1;
+      updateLightbox();
+      if (imagePaths.length === 0) {
+        notice.hidden = false;
+      }
       setLoading(false);
     }
-
-    function openLightbox(idx) {
-      if (!currentManifest.length) return;
-      currentIndex = idx;
-      updateLightboxImage();
-      lightbox.setAttribute('aria-hidden', 'false');
+    function showError(message) {
+      gallery.innerHTML = '';
+      notice.hidden = false;
+      notice.innerHTML = `<div class="empty-icon">⚠️</div><p>${message}</p>`;
+    }
+    function openLightbox(index) {
+      currentIndex = index;
+      updateLightbox();
       lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
     }
-
     function closeLightbox() {
-      lightbox.setAttribute('aria-hidden', 'true');
       lightbox.classList.remove('open');
-      lbImg.src = '';
-      lbCaption.textContent = '';
-      lbCounter.textContent = '';
+      lightbox.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
-      currentIndex = -1;
     }
-
-    function showNext(delta) {
-      if (!currentManifest.length) return;
-      currentIndex = (currentIndex + delta + currentManifest.length) % currentManifest.length;
-      updateLightboxImage();
-    }
-
-    function updateLightboxImage() {
-      lbImg.src = currentManifest[currentIndex];
-      const filename = lbImg.src.split('/').pop().replace(/\.(jpg|jpeg|png|gif|webp)/i, '').replace(/[-_]/g, ' ');
+    function updateLightbox() {
+      if (currentIndex < 0 || currentIndex >= currentManifest.length) {
+        lbImg.src = '';
+        lbImg.alt = '';
+        lbCaption.textContent = '';
+        lbCounter.textContent = '';
+        return;
+      }
+      const src = currentManifest[currentIndex];
+      lbImg.src = src;
+      const filename = src.split('/').pop().replace(/\.(jpg|jpeg|png|gif|webp)/i, '').replace(/[-_]/g, ' ');
       lbImg.alt = `${currentAlbum.name} - ${filename}`;
-      lbCaption.textContent = lbImg.alt;
-      lbCounter.textContent = `${currentIndex + 1} / ${currentManifest.length}`;
+      lbCaption.textContent = filename;
+      lbCounter.textContent = `${currentIndex + 1} of ${currentManifest.length}`;
     }
-
+    function showPrev() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateLightbox();
+      }
+    }
+    function showNext() {
+      if (currentIndex < currentManifest.length - 1) {
+        currentIndex++;
+        updateLightbox();
+      }
+    }
     document.getElementById('lb-close').addEventListener('click', closeLightbox);
-    document.getElementById('lb-prev').addEventListener('click', () => showNext(-1));
-    document.getElementById('lb-next').addEventListener('click', () => showNext(1));
-    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
-    document.addEventListener('keydown', e => {
+    document.getElementById('lb-prev').addEventListener('click', showPrev);
+    document.getElementById('lb-next').addEventListener('click', showNext);
+    document.addEventListener('keydown', (e) => {
       if (lightbox.classList.contains('open')) {
         if (e.key === 'Escape') closeLightbox();
-        if (e.key === 'ArrowLeft') showNext(-1);
-        if (e.key === 'ArrowRight') showNext(1);
+        if (e.key === 'ArrowLeft') showPrev();
+        if (e.key === 'ArrowRight') showNext();
       }
     });
-
-    initAlbums().catch(error => {
-      console.error('Failed to initialize gallery:', error);
-      showError('Failed to load gallery. Please check the console for details.');
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
     });
+    window.addEventListener('load', initAlbums);
   </script>
 </body>
 </html>

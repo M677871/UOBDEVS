@@ -3,5 +3,13 @@
     {
         "name": "Dev Club Logo",
         "folder": "images/dev club"
+    },
+    {
+        "name":"Clubs fair 2025",
+        "folder":"images/club fair 2025"
+    },
+    {
+        "name": "The Devs",
+        "folder": "images/The Devs"
     }
 ]

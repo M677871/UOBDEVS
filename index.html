@@ -83,6 +83,7 @@
     </div>
   </footer>
 
+  <!-- Lightbox -->
   <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
     <button id="lb-close" class="lb-close" aria-label="Close">✕</button>
     <button id="lb-prev" class="lb-nav" aria-label="Previous">◀</button>
@@ -90,8 +91,28 @@
     <button id="lb-next" class="lb-nav" aria-label="Next">▶</button>
     <div id="lb-caption" class="lb-caption"></div>
     <div id="lb-counter" class="lb-counter"></div>
+
+    <!-- Download current photo (inside lightbox) -->
+    <a id="lb-dl"
+       class="lb-action"
+       href="#"
+       download
+       aria-label="Download photo"
+       aria-disabled="true"
+       title="Download">
+      <i class="fa-solid fa-download" aria-hidden="true"></i>
+      <span class="sr-only">Download</span>
+    </a>
   </div>
 
-
+  <!-- Back to top (outside lightbox) -->
+  <button id="back-to-top"
+          class="back-to-top"
+          type="button"
+          aria-label="Back to top"
+          title="Back to top">
+    <i class="fa-solid fa-circle-chevron-up" aria-hidden="true"></i>
+    <span class="sr-only">Back to top</span>
+  </button>
 </body>
 </html>

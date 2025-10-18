@@ -1,6 +1,6 @@
 
 const SHOW_LOADING   = false;
-const BATCH_SIZE     = 24;
+const BATCH_SIZE     = 30;
 const MAX_DOM_NODES  = 80;
 const IO_ROOT_MARGIN = '400px 0px';
 
